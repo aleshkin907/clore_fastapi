@@ -1,5 +1,5 @@
-from repositories.server import ServerRepository
-from services.server import ServerService
+from repositories.server_repository import ServerRepository
+from services.server_service import ServerService
 
 
 def server_service():

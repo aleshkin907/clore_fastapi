@@ -1,9 +1,12 @@
+from typing import List, Optional, Union
 from sqlalchemy import ForeignKey
-from sqlalchemy.orm import Mapped, mapped_column, relationship
+from sqlalchemy.orm import Mapped, mapped_column
 from fastapi_filter.contrib.sqlalchemy import Filter
 
 from db.db import Base
-from schemas.server import ServerSchema
+from models.gpu import Gpu
+from schemas.gpu_schema import GpuSchema
+from schemas.server_schema import ServerSchema
 
 
 class Server(Base):
@@ -28,23 +31,42 @@ class Server(Base):
     rented: Mapped[bool]
     profit: Mapped[float] = mapped_column(nullable=True)
 
-    # gpu = relationship("Gpu", back_populates="servers")
-
-    def to_read_model(self, gpu_name) -> ServerSchema:
+    def to_read_model(self, gpu: Gpu) -> ServerSchema:
         return ServerSchema(
             id=self.id,
-            rented=self.rented,
+            price=self.price,
+            demand_bitcoin=self.demand_bitcoin,
+            demand_clore=self.demand_clore,
+            spot_bitcoin=self.spot_bitcoin,
+            spot_clore=self.spot_clore,
+            mb=self.mb,
             cpu=self.cpu,
-            gpu_name=gpu_name
+            cpus=self.cpus,
+            ram=self.ram,
+            disk=self.disk,
+            disk_speed=self.disk_speed,
+            gpu=GpuSchema(
+                id=gpu.id, 
+                name=gpu.name, 
+                gpu_ram=gpu.gpu_ram, 
+                revenue=gpu.revenue, 
+                coin=gpu.coin
+            ),
+            gpu_count=self.gpu_count,
+            net_up=self.net_up,
+            net_down=self.net_down,
+            rented=self.rented,
+            profit=self.profit
         )
     
 
-class ServerFilter(Filter):
-    rented: bool
+class ServerFilter(Filter): 
+    rented: bool | None = None
+    profit__gt : int | None = None
+    order_by: List[str] | None = None
 
     class Constants(Filter.Constants):
         model = Server
 
     class Config:
         allow_population_by_field_name = True
-    
