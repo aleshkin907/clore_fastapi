@@ -25,7 +25,7 @@ class ServerRepository(AbstractServerRepository):
             filtered_sorted_stmt = server_filter.sort(filtered_stmt)
             filtered_paginated_stmt = filtered_sorted_stmt.limit(limit).offset(offset)
             count_stmt = select(func.count()).select_from(filtered_stmt)
-            print(filtered_sorted_stmt)
+
             count = await session.execute(count_stmt)
             filtered_servers_with_gpus = await session.execute(filtered_paginated_stmt)
 
