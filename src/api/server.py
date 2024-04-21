@@ -4,9 +4,10 @@ from fastapi import APIRouter, Depends, Query, HTTPException
 from fastapi_filter import FilterDepends
 
 from api.dependencies import server_service
-from models.server import ServerFilter
+from filters.server_filter import ServerFilter
 from schemas.server_schema import PaginatedServerSchema
 from services.server_service import ServerService
+from utils.consts import LIMIT, PAGE
 
 
 router = APIRouter(
@@ -17,10 +18,11 @@ router = APIRouter(
 @router.get("/")
 async def get_servers(
     server_service: Annotated[ServerService, Depends(server_service)],
-    server_filter: ServerFilter = FilterDepends(ServerFilter),
-    limit: int = Query(20, ge=0),
-    page: int = Query(1, ge=1)
+    server_filter: Annotated[ServerFilter, FilterDepends(ServerFilter)],
+    limit: int = Query(LIMIT, ge=0),
+    page: int = Query(PAGE, ge=1)
 ) -> PaginatedServerSchema:
+    print(server_filter)
     servers = await server_service.get_all(server_filter, limit, page)
     if not servers.data:
         raise HTTPException(

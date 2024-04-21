@@ -1,7 +1,5 @@
-from typing import List, Optional, Union
 from sqlalchemy import ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column
-from fastapi_filter.contrib.sqlalchemy import Filter
 
 from db.db import Base
 from models.gpu import Gpu
@@ -58,15 +56,3 @@ class Server(Base):
             rented=self.rented,
             profit=self.profit
         )
-    
-
-class ServerFilter(Filter): 
-    rented: bool | None = None
-    profit__gt : int | None = None
-    order_by: List[str] | None = None
-
-    class Constants(Filter.Constants):
-        model = Server
-
-    class Config:
-        allow_population_by_field_name = True

@@ -31,4 +31,4 @@ class PaginatedServerSchema(BaseModel):
     total: int
     page: int
     size: int
-    
+        

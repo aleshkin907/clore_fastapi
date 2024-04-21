@@ -1,6 +1,6 @@
 from repositories.server_repository import AbstractServerRepository
 from schemas.server_schema import PaginatedServerSchema
-from models.server import ServerFilter
+from filters.server_filter import ServerFilter
 
 
 class ServerService:
@@ -13,5 +13,4 @@ class ServerService:
         offset = (page - 1) * limit
         servers = await self.server_repository.get_all(server_filter, limit, offset)
         return servers
-    
     

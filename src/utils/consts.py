@@ -1,0 +1,2 @@
+LIMIT = 20
+PAGE = 1

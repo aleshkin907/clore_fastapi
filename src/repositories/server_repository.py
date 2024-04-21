@@ -5,7 +5,7 @@ from sqlalchemy import func, select
 from db.db import async_session_maker
 from models.gpu import Gpu
 from models.server import Server
-from models.server import ServerFilter
+from filters.server_filter import ServerFilter
 from schemas.server_schema import PaginatedServerSchema
 
 
@@ -25,7 +25,7 @@ class ServerRepository(AbstractServerRepository):
             filtered_sorted_stmt = server_filter.sort(filtered_stmt)
             filtered_paginated_stmt = filtered_sorted_stmt.limit(limit).offset(offset)
             count_stmt = select(func.count()).select_from(filtered_stmt)
-
+            
             count = await session.execute(count_stmt)
             filtered_servers_with_gpus = await session.execute(filtered_paginated_stmt)
 
