@@ -3,8 +3,7 @@ from sqlalchemy.orm import DeclarativeBase
 from configs.config import settings
 
 
-POSTGRES_URL = f'postgresql+asyncpg://{settings.DB_USER}:{settings.DB_PASS}@{settings.DB_HOST}:{settings.DB_PORT}/{settings.DB_NAME}'
-
+POSTGRES_URL = f'postgresql+asyncpg://{settings.db.user}:{settings.db.password}@{settings.db.host}:{settings.db.port}/{settings.db.name}'
 
 engine = create_async_engine(POSTGRES_URL)
 async_session_maker = async_sessionmaker(engine, expire_on_commit=False)

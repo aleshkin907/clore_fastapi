@@ -18,7 +18,7 @@ class AbstractServerRepository(ABC):
 class ServerRepository(AbstractServerRepository):
     model = Server
     
-    async def get_all(self, server_filter: ServerFilter,limit: int, offset: int):
+    async def get_all(self, server_filter: ServerFilter,limit: int, offset: int) -> PaginatedServerSchema:
         async with async_session_maker() as session:
             stmt = select(self.model, Gpu).join(Gpu).where(self.model.gpu_id == Gpu.id)
             filtered_stmt = server_filter.filter(stmt)
