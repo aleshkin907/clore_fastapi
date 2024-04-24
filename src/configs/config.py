@@ -1,8 +1,11 @@
+from pathlib import Path
 from typing import Optional
 
 from pydantic import BaseModel
 from pydantic_settings import BaseSettings
 from pydantic_settings_yaml import YamlBaseSettings
+
+from utils.consts import BASE_DIR
 
 
 class Database(BaseModel):
@@ -29,7 +32,9 @@ class DbSettings(YamlBaseSettings):
 
 
 class AuthJWT(BaseModel):
-    pass
+    private_key_path: Path = BASE_DIR / "certs" / "jwt-private.pem"
+    public_key_path: Path = BASE_DIR / "certs" / "jwt-public.pem"
+    algorithm: str = "RS256"
 
 
 class Settings(BaseModel):

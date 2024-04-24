@@ -1,6 +1,6 @@
-from api.server import router as router_server
+from api.server import router as server_router
 
 
 all_routers = [
-    router_server
+    server_router
 ]
