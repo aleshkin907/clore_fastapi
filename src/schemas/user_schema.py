@@ -1,7 +1,14 @@
 from pydantic import BaseModel
 
 
-class UserSchema(BaseModel):
+class UserSignUpSchema(BaseModel):
     login: str
-    hashed_password: str
+    password: str | bytes
+
+
+# class UserResponseSchema(BaseModel):
+#     id: int
+#     login: str
+#     api_key: str | None
+
     

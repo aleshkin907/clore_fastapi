@@ -3,6 +3,7 @@ from abc import ABC, abstractmethod
 from sqlalchemy import func, select
 
 from db.db import async_session_maker
+from exceptions.server_exceptions import ServersNotFoundException
 from models.gpu import Gpu
 from models.server import Server
 from filters.server_filter import ServerFilter
@@ -20,6 +21,8 @@ class ServerRepository(AbstractServerRepository):
     
     async def get_all(self, server_filter: ServerFilter,limit: int, offset: int) -> PaginatedServerSchema:
         async with async_session_maker() as session:
+            page = (offset / limit) + 1
+
             stmt = select(self.model, Gpu).join(Gpu).where(self.model.gpu_id == Gpu.id)
             filtered_stmt = server_filter.filter(stmt)
             filtered_sorted_stmt = server_filter.sort(filtered_stmt)
@@ -28,8 +31,9 @@ class ServerRepository(AbstractServerRepository):
             
             count = await session.execute(count_stmt)
             filtered_servers_with_gpus = await session.execute(filtered_paginated_stmt)
-
             data = [row[0].to_read_model(row[1]) for row in filtered_servers_with_gpus.all()]
-            res = PaginatedServerSchema(data=data, page=(offset / limit) + 1, size=len(data), total=count.scalar())
+            if not data:
+                raise ServersNotFoundException(page=page, **server_filter.model_dump())
+            res = PaginatedServerSchema(data=data, page=page, size=len(data), total=count.scalar())
             return res
         

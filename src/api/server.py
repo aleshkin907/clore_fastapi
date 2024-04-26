@@ -1,6 +1,6 @@
 from typing import Annotated
 
-from fastapi import APIRouter, Depends, Query, HTTPException
+from fastapi import APIRouter, Depends, Query
 from fastapi_filter import FilterDepends
 
 from api.dependencies import server_service
@@ -22,11 +22,5 @@ async def get_servers(
     limit: int = Query(LIMIT, ge=0),
     page: int = Query(PAGE, ge=1)
 ) -> PaginatedServerSchema:
-    print(server_filter)
     servers = await server_service.get_all(server_filter, limit, page)
-    if not servers.data:
-        raise HTTPException(
-            404,
-            detail="Servers not found"
-        )
     return servers
