@@ -6,9 +6,11 @@ class UserSignUpSchema(BaseModel):
     password: str | bytes
 
 
-# class UserResponseSchema(BaseModel):
-#     id: int
-#     login: str
-#     api_key: str | None
-
+class UserSignInSchema(BaseModel):
+    login: str
+    password: str | bytes
     
+class UserSchema(BaseModel):
+    id: int
+    login: str
+    hashed_password: str | bytes

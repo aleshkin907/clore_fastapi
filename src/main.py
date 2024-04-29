@@ -6,9 +6,7 @@ from configs.config import settings
 from exceptions.setup_exceptions import setup_exceptions
 
 
-app = FastAPI(
-    title="Clore ai Backend"
-)
+app = FastAPI(title="Clore ai Backend")
 
 setup_exceptions(app)
 
@@ -17,5 +15,6 @@ for router in all_routers:
 
 
 if __name__ == "__main__":
-    uvicorn.run(app="main:app", host=settings.app.host, port=settings.app.port, reload=True)
-    
+    uvicorn.run(
+        app="main:app", host=settings.app.host, port=settings.app.port, reload=True
+    )
